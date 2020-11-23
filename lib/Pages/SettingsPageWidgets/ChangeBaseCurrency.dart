@@ -9,10 +9,9 @@ class ChangeBaseCurrency extends StatelessWidget {
   String tempBaseCurrency;
 
   List<Widget> selectCurrencyWidget(DataBloc appData, BuildContext context) {
-    CurrencyData cur = new CurrencyData();
     tempBaseCurrency = appData.baseCurrency.toString();
     print(tempBaseCurrency);
-    Iterable availableCurrencies = cur.getAvailableCurrency();
+    Iterable availableCurrencies = CurrencyData.getAvailableCurrency();
     List<Widget> radioList = new List(availableCurrencies.length);
     int count = 0;
     for (String currency in availableCurrencies) {
