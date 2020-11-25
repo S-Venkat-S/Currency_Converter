@@ -17,7 +17,7 @@ class HomePage extends StatelessWidget {
         elevation: 10,
         child: TopBar(),
       ),
-      new Expanded(
+      Expanded(
         child: CurrencyList()
       )
     ]);

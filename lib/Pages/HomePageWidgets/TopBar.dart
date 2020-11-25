@@ -28,7 +28,7 @@ class TopBar extends StatelessWidget {
     final DataBloc appData = Provider.of<DataBloc>(context);
     return Container(
       color: Colors.white,
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.only(top:4.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -59,10 +59,13 @@ class TopBar extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
-              Text(
+              FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Text(
                 "For 1 " + CurrencyData.getCurrencySymbolData(appData.baseCurrency)[1],
                 style: TextStyle(fontSize: 24),
-              ),
+                overflow: TextOverflow.ellipsis,
+              )),
               Text(
                 appData.baseCurrency +
                     " ( " +

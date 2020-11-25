@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:currency_converter/Pages/ConvertPageWidgets/convertForm.dart';
 
-class ConverPage extends StatelessWidget {
+class ConvertPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Text("Convert Page"),
+    return Container(
+      child: ConvertForm(),
     );
   }
 }

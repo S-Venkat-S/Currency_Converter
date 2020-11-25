@@ -10,18 +10,17 @@ class ChangeBaseCurrency extends StatelessWidget {
 
   List<Widget> selectCurrencyWidget(DataBloc appData, BuildContext context) {
     tempBaseCurrency = appData.baseCurrency.toString();
-    print(tempBaseCurrency);
     Iterable availableCurrencies = CurrencyData.getAvailableCurrency();
     List<Widget> radioList = new List(availableCurrencies.length);
     int count = 0;
     for (String currency in availableCurrencies) {
-      radioList[count] = getRadioWidget(currency, appData, context);
+      radioList[count] = getRadioWidget(currency, context);
       count++;
     }
     return radioList;
   }
 
-  Widget getRadioWidget(String data, DataBloc appData, BuildContext context) {
+  Widget getRadioWidget(String data, BuildContext context) {
     final DataBloc appData = Provider.of<DataBloc>(context);
     return ListTile(
       title: Text(data),

@@ -16,7 +16,7 @@ class PageHandler extends StatelessWidget {
     StatelessWidget currentPage = HomePage();
 
     if (pageIndex == 1) {
-      currentPage = ConverPage();
+      currentPage = ConvertPage();
     } else if (pageIndex == 2) {
       currentPage = SettingsPage();
     } else {

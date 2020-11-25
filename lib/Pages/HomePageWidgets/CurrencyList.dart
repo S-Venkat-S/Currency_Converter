@@ -8,6 +8,11 @@ import 'package:currency_converter/Bloc/DataBloc.dart';
 
 class CurrencyList extends StatelessWidget {
 
+  void _showToast(BuildContext context, String msgStr) {
+
+  }
+
+
   Future prepareList(DataBloc data) async {
     print(data.baseCurrency);
     var ratesData = CurrencyData.getData(data.currentDate, data.baseCurrency);
@@ -41,6 +46,8 @@ class CurrencyList extends StatelessWidget {
     return FutureBuilder (
       future: prepareList(data),
       builder: (context, snapshot) {
+        String base = data.baseCurrency;
+        String date = data.currentDateString;
         if (snapshot.hasData) {
           List<Widget> allRates = new List();
           List<List> allData = snapshot.data.cast<List>();
@@ -51,6 +58,7 @@ class CurrencyList extends StatelessWidget {
             String countryName = arr[3];
             allRates.add(getList(currShortCode, price, symbol, countryName));
           }
+          _showToast(context, "Showing $date's data for $base.");
           return ListView(shrinkWrap: true, children:allRates);
         }
         else {
