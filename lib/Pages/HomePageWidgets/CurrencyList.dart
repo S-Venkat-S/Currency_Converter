@@ -8,6 +8,10 @@ import 'package:currency_converter/Bloc/DataBloc.dart';
 
 class CurrencyList extends StatelessWidget {
 
+  bool fromConvertpage;
+
+  CurrencyList([this.fromConvertpage = false]);
+
   void _showToast(BuildContext context, String msgStr) {
 
   }
@@ -15,16 +19,30 @@ class CurrencyList extends StatelessWidget {
 
   Future prepareList(DataBloc data) async {
     print(data.baseCurrency);
-    var ratesData = CurrencyData.getData(data.currentDate, data.baseCurrency);
+    DateTime date = data.currentDate;
+    String base = data.baseCurrency;
+    if (fromConvertpage) {
+      date = data.convertDate;
+      base = data.fromCurrency;
+    }
+    var ratesData = CurrencyData.getData(date, base);
     return ratesData.then((result) {
       result = jsonDecode(result.body)["rates"];
       List<List> currencyData = new List();
       int i = 0;
-      for (String currShortCode in result.keys) {
+      Iterable shortCodes = result.keys;
+      if (fromConvertpage) {
+        shortCodes = data.toCurrencies;
+      }
+      print(shortCodes);
+      for (String currShortCode in shortCodes) {
         List symbolData = CurrencyData.getCurrencySymbolData(currShortCode);
         String symbol = symbolData[0];
         String countryName = symbolData[1];
-        var price = result[currShortCode];
+        double price = result[currShortCode];
+        if (fromConvertpage) {
+          price = price * data.convertAmount;
+        }
         currencyData.add([currShortCode, price, symbol, countryName]);
         i++;
       }
@@ -48,7 +66,7 @@ class CurrencyList extends StatelessWidget {
       builder: (context, snapshot) {
         String base = data.baseCurrency;
         String date = data.currentDateString;
-        if (snapshot.hasData) {
+        if (snapshot.connectionState == ConnectionState.done) {
           List<Widget> allRates = new List();
           List<List> allData = snapshot.data.cast<List>();
           for (List arr in allData) {

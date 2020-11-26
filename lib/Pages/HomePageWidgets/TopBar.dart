@@ -26,15 +26,13 @@ class TopBar extends StatelessWidget {
 
   Widget build(BuildContext context) {
     final DataBloc appData = Provider.of<DataBloc>(context);
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.only(top:4.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
+    return ListTile(
+      contentPadding: EdgeInsets.all(10),
+      tileColor: Colors.white,
+      title: Row(
         children: <Widget>[
           Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
                 "Exchange Rate",
@@ -48,24 +46,23 @@ class TopBar extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         appData.currentDateString + " ",
-                        style: TextStyle(fontSize: 20),
+                        style: TextStyle(fontSize: 24),
                       ),
-                      Icon(Icons.arrow_drop_down)
+                      Icon(Icons.arrow_drop_down, color: Colors.blue)
                     ],
                   ))
             ],
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Expanded(
+            child:Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
-              FittedBox(
-                fit: BoxFit.fitWidth,
-                child: Text(
+              Text(
                 "For 1 " + CurrencyData.getCurrencySymbolData(appData.baseCurrency)[1],
                 style: TextStyle(fontSize: 24),
                 overflow: TextOverflow.ellipsis,
-              )),
+                ),
+
               Text(
                 appData.baseCurrency +
                     " ( " +
@@ -74,7 +71,7 @@ class TopBar extends StatelessWidget {
                 style: TextStyle(fontSize: 24),
               ),
             ],
-          )
+          ))
         ],
       )
     );

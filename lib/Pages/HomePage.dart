@@ -10,13 +10,10 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(children: <Widget>[
       Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        color: Colors.white70,
-        elevation: 10,
         child: TopBar(),
-      ),
+        margin: EdgeInsets.all(0),
+        elevation: 10,
+      ) ,
       Expanded(
         child: CurrencyList()
       )

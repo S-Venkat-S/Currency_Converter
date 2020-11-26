@@ -9,9 +9,16 @@ class DataBloc with ChangeNotifier {
   String _currentDateFormat = "DD-MM-YYYY";
   String _currentDate = Utils.formatDate(DateTime.now(), "DD-MM-YYYY");
   List<String> _toCurrencies = new List<String>();
+  DateTime _convertDateDT = DateTime.now();
+  String _convertDate = Utils.formatDate(DateTime.now(), "DD-MM-YYYY");
+  double _convertAmount = 1;
 
   String get currentDateFormat {
     return _currentDateFormat;
+  }
+
+  double get convertAmount {
+    return _convertAmount;
   }
 
   List<String> get toCurrencies {
@@ -26,8 +33,16 @@ class DataBloc with ChangeNotifier {
     return _currentDate;
   }
 
+  String get convertDateString {
+    return _convertDate;
+  }
+
   DateTime get currentDate {
     return _currentDateDT;
+  }
+
+  DateTime get convertDate {
+    return _convertDateDT;
   }
 
   String get baseCurrency{
@@ -59,9 +74,20 @@ class DataBloc with ChangeNotifier {
     notifyListeners();
   }
 
+  set convertAmount(double amount) {
+    _convertAmount = amount;
+    notifyListeners();
+  }
+
   set currentDate(DateTime date) {
     _currentDateDT = date;
     _currentDate = Utils.formatDate(_currentDateDT, _currentDateFormat);
+    notifyListeners();
+  }
+
+  set convertDate(DateTime date) {
+    _convertDateDT = date;
+    _convertDate = Utils.formatDate(_currentDateDT, _currentDateFormat);
     notifyListeners();
   }
 

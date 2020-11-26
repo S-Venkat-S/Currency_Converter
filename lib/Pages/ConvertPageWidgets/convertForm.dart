@@ -87,10 +87,12 @@ class _ConvertFormState extends State<ConvertForm> {
     );
   }
 
-  void updateAmount(String val) {
+  void updateAmount(String val, BuildContext context) {
+    final DataBloc appData = Provider.of<DataBloc>(context);
     try {
       double value = double.parse(val);
       setState(() {
+        appData.convertAmount = value;
         amount = value;
         isAmountError = false;
       });
@@ -197,6 +199,20 @@ class _ConvertFormState extends State<ConvertForm> {
     );
   }
 
+  Future<void> dateSelectWidget(BuildContext context) async {
+    final DataBloc appData = Provider.of<DataBloc>(context);
+    final DateTime datePicked = await showDatePicker(
+        context: context,
+        initialDate: appData.convertDate,
+        firstDate: appData.convertDate.subtract(new Duration(days: 365)),
+        lastDate: DateTime.now());
+    if (null != datePicked) {
+      appData.convertDate = datePicked;
+    }
+  }
+
+  void convert(){}
+
   @override
   Widget build(BuildContext context) {
     final DataBloc appData = Provider.of<DataBloc>(context);
@@ -232,39 +248,59 @@ class _ConvertFormState extends State<ConvertForm> {
                 errorText: isAmountError ? 'Please correct value' : null,
             ),
             keyboardType: TextInputType.number, // Only numbers can be entered
-            onChanged: (value) {updateAmount(value);},
+            onChanged: (value) {updateAmount(value, context);},
 
           ),
         ),
-        GestureDetector(
-          onTap: (){toCurrencySelectWidget(context);},
-          behavior: HitTestBehavior.opaque,
-          child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Text("To currencies", style: TextStyle(fontSize: UiConstants.fontSizeNormal),),
-                  Wrap(
-                    spacing: 2,
+        Container(
+          alignment: FractionalOffset.center,
+          padding: EdgeInsets.only(left: 10, right: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [GestureDetector(
+              onTap: (){toCurrencySelectWidget(context);},
+              behavior: HitTestBehavior.opaque,
+              child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Icon(Icons.arrow_drop_down, size: 20, color: Colors.blue,)
+                      Text("To currencies", style: TextStyle(fontSize: UiConstants.fontSizeNormal),),
+                      Wrap(
+                        spacing: 2,
+                        children: <Widget>[
+                          Icon(Icons.arrow_drop_down, size: 20, color: Colors.blue,)
+                        ],
+                      )
                     ],
                   )
-                ],
-              )
+              ),
+            ), GestureDetector(
+                onTap: () {
+                  dateSelectWidget(context);
+                },
+                child: Wrap(
+                  children: <Widget>[
+                    Text(
+                      appData.currentDateString + " ",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    Icon(Icons.arrow_drop_down)
+                  ],
+                ))],
           ),
         ),
         Container(
           child: Wrap(
+            alignment: WrapAlignment.start,
             spacing: 4.0,
             children: updateChips(context),
           ),
           ),
         Container(
-          child: Expanded(child: CurrencyList(),),
-        )
+          child: Expanded(child: CurrencyList(true),),
+        ),
       ]
       );
     }
