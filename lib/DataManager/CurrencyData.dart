@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:currency_converter/DataManager/SharedPref.dart';
 import 'package:currency_converter/API/CurrencyApi.dart';
 
 
@@ -16,13 +15,6 @@ class CurrencyData {
 
   static Iterable getAvailableCurrency() {
     return jsonDecode(availableCurrencies);
-  }
-
-  static String getLatestDate() {
-    String latestDate = SharedPref.prefInstance.get("latest_date");
-    if (latestDate == null) {
-
-    }
   }
 
   static Future getData(DateTime date, String base) {

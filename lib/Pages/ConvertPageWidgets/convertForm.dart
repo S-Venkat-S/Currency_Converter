@@ -16,6 +16,7 @@ class _ConvertFormState extends State<ConvertForm> {
   double amount;
   List<String> toList = ["INR", "USD"];
   bool isAmountError = false;
+  bool _convert = false;
   List<Widget> selectFromCurrency(BuildContext context) {
     Iterable currencies = CurrencyData.getAvailableCurrency();
     List<Widget> currencyLists = new List<Widget>(currencies.length);
@@ -56,7 +57,7 @@ class _ConvertFormState extends State<ConvertForm> {
         value: shortCode,
         groupValue: appData.fromCurrency,
         activeColor: Colors.blue,
-        onChanged: (value) {appData.fromCurrency = value;}
+        onChanged: (value) {stopConvert();appData.fromCurrency = value;}
     );
   }
 
@@ -89,6 +90,7 @@ class _ConvertFormState extends State<ConvertForm> {
 
   void updateAmount(String val, BuildContext context) {
     final DataBloc appData = Provider.of<DataBloc>(context);
+    stopConvert();
     try {
       double value = double.parse(val);
       setState(() {
@@ -168,7 +170,7 @@ class _ConvertFormState extends State<ConvertForm> {
         subtitle: Text(symbol),
         value: isSelected,
         activeColor: Colors.blue,
-        onChanged: (value) {appData.updateToCurrencies(shortCode, value);}
+        onChanged: (value) {stopConvert();appData.updateToCurrencies(shortCode, value);}
     );
   }
 
@@ -208,10 +210,21 @@ class _ConvertFormState extends State<ConvertForm> {
         lastDate: DateTime.now());
     if (null != datePicked) {
       appData.convertDate = datePicked;
+      stopConvert();
     }
   }
 
-  void convert(){}
+  void stopConvert() {
+    setState(() {
+      _convert = false;
+    });
+  }
+
+  void convert() {
+    setState(() {
+      _convert = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -242,7 +255,8 @@ class _ConvertFormState extends State<ConvertForm> {
       ),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-          child: TextField(
+          child: TextFormField(
+            initialValue: "1",
             decoration: new InputDecoration(
                 labelText: "Enter amount",
                 errorText: isAmountError ? 'Please correct value' : null,
@@ -299,7 +313,17 @@ class _ConvertFormState extends State<ConvertForm> {
           ),
           ),
         Container(
-          child: Expanded(child: CurrencyList(true),),
+          padding: EdgeInsets.only(left: 5, right: 5),
+          width: double.infinity,
+          child: RaisedButton(
+              onPressed: (){convert();},
+              child: Text("Convert", style: TextStyle(fontSize: 16),),
+              textColor: Colors.white,
+              color: Colors.blue
+          ),
+        ),
+        Container(
+          child: Expanded(child: _convert == true ? CurrencyList(true) : Text("Select To currencies"),),
         ),
       ]
       );

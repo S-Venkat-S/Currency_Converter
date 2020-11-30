@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class NavBloc with ChangeNotifier {
-  int _pageIndex = 1;
+  int _pageIndex = 0;
 
   get pageIndex{
     return _pageIndex;
@@ -9,7 +9,6 @@ class NavBloc with ChangeNotifier {
 
   void setPageIndex(int value) {
     _pageIndex = value;
-    print(value);
     notifyListeners();
   }
 

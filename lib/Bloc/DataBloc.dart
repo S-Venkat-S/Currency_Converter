@@ -1,5 +1,7 @@
 import 'package:currency_converter/Utils.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:currency_converter/Constants/VarConstants.dart';
 
 class DataBloc with ChangeNotifier {
   String _baseCurrency = "USD";
@@ -12,6 +14,17 @@ class DataBloc with ChangeNotifier {
   DateTime _convertDateDT = DateTime.now();
   String _convertDate = Utils.formatDate(DateTime.now(), "DD-MM-YYYY");
   double _convertAmount = 1;
+  SharedPreferences pref;
+
+  DataBloc() {
+    SharedPreferences.getInstance().then((prefIns) {
+      print(prefIns);
+      pref = prefIns;
+      _baseCurrency = pref.getString(VarConstants.baseCurrency) ?? _baseCurrency;
+      _currentDateFormat = pref.getString(VarConstants.currentDateFormat) ?? _currentDateFormat;
+    });
+  }
+
 
   String get currentDateFormat {
     return _currentDateFormat;
@@ -66,6 +79,7 @@ class DataBloc with ChangeNotifier {
 
   set baseCurrency(String value) {
     _baseCurrency = value;
+    pref.setString(VarConstants.baseCurrency, _baseCurrency);
     notifyListeners();
   }
 
@@ -94,6 +108,7 @@ class DataBloc with ChangeNotifier {
   set currentDateFormat(String dateFormat) {
     _currentDateFormat = dateFormat;
     _currentDate = Utils.formatDate(_currentDateDT, _currentDateFormat);
+    pref.setString(VarConstants.currentDateFormat, _currentDateFormat);
     notifyListeners();
   }
 

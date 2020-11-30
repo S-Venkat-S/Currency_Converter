@@ -6,6 +6,8 @@ class SharedPref {
 
   SharedPref() {
     SharedPreferences.getInstance().then((pref) {
+      print("getting pref");
+      print(pref);
       prefInstance = pref;
     });
   }
