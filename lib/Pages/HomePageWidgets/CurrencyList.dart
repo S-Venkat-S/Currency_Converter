@@ -60,7 +60,8 @@ class CurrencyList extends StatelessWidget {
     }
   }
 
-  Widget uiBuilder(DataBloc data) {
+  Widget uiBuilder(BuildContext context) {
+    final DataBloc data = Provider.of<DataBloc>(context);
     return FutureBuilder (
       future: prepareList(data),
       builder: (context, snapshot) {
@@ -118,7 +119,10 @@ class CurrencyList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DataBloc appData = Provider.of<DataBloc>(context);
-    return uiBuilder(appData);
+    final DataBloc data = Provider.of<DataBloc>(context);
+    if (data.isDataLoaded) {
+      return uiBuilder(context);
+    }
+    return Text("Loading...");
   }
 }

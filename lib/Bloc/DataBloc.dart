@@ -15,16 +15,20 @@ class DataBloc with ChangeNotifier {
   String _convertDate = Utils.formatDate(DateTime.now(), "DD-MM-YYYY");
   double _convertAmount = 1;
   SharedPreferences pref;
+  bool _isDataLoaded = false;
 
   DataBloc() {
     SharedPreferences.getInstance().then((prefIns) {
-      print(prefIns);
       pref = prefIns;
-      _baseCurrency = pref.getString(VarConstants.baseCurrency) ?? _baseCurrency;
-      _currentDateFormat = pref.getString(VarConstants.currentDateFormat) ?? _currentDateFormat;
+      baseCurrency = pref.getString(VarConstants.baseCurrency) ?? _baseCurrency;
+      currentDateFormat = pref.getString(VarConstants.currentDateFormat) ?? _currentDateFormat;
+      isDataLoaded = true;
     });
   }
 
+  bool get isDataLoaded {
+    return _isDataLoaded;
+  }
 
   String get currentDateFormat {
     return _currentDateFormat;
@@ -90,6 +94,11 @@ class DataBloc with ChangeNotifier {
 
   set convertAmount(double amount) {
     _convertAmount = amount;
+    notifyListeners();
+  }
+
+  set isDataLoaded(bool set) {
+    _isDataLoaded = set;
     notifyListeners();
   }
 
